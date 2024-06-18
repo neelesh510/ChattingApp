@@ -2,6 +2,11 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const User = sequelize.define('User', {
+  id : {
+    type : DataTypes.STRING,
+    primaryKey : true,
+    allowNull : false
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -19,6 +24,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING
   }
 }, {
+  tableName : 'users',
   timestamps: true
 });
 
