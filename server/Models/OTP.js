@@ -6,11 +6,11 @@ const OTP = sequelize.define('OTP', {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     otp: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique : true,
     },
     createdAt: {
         type: DataTypes.DATE,

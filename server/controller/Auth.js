@@ -6,30 +6,30 @@ const otpGenerator = require("otp-generator");
 const mailSender = require("../utils/mailSender");
 require("dotenv").config();
 
-exports.signup = async(req,res) =>{
-    try{
+exports.signup = async (req, res) => {
+    try {
         const {
-            id,name,email,password,confirmPassword,otp
+            id, name, email, password, confirmPassword, otp
         } = req.body;
-        if(!id || !name || !email || !password || !confirmPassword || !otp){
+        if (!id || !name || !email || !password || !confirmPassword || !otp) {
             return res.status(403).send({
-				success: false,
-				message: "All Fields are required",
-			});
+                success: false,
+                message: "All Fields are required",
+            });
         };
-        if(password!==confirmPassword){
+        if (password !== confirmPassword) {
             return res.status(400).json({
-				success: false,
-				message:
-					"Password and Confirm Password do not match. Please try again.",
-			});
+                success: false,
+                message:
+                    "Password and Confirm Password do not match. Please try again.",
+            });
         };
         const existingUser = await User.findOne({ where: { email } });
-        if(existingUser){
+        if (existingUser) {
             return res.status(400).json({
-				success: false,
-				message: "User already exists. Please sign in to continue.",
-			});
+                success: false,
+                message: "User already exists. Please sign in to continue.",
+            });
         };
         //Find the most recent OTP for the email
         // Find the most recent OTP for the email
@@ -53,24 +53,23 @@ exports.signup = async(req,res) =>{
         });
 
         return res.status(200).json({
-			success: true,
-			newUser,
-			message: "User registered successfully",
-		});
+            success: true,
+            newUser,
+            message: "User registered successfully",
+        });
 
-    }catch(error){
+    } catch (error) {
         console.error(error);
-		return res.status(500).json({
-			success: false,
-			message: "User cannot be registered. Please try again.",
-		});
+        return res.status(500).json({
+            success: false,
+            message: "User cannot be registered. Please try again.",
+        });
     };
 };
 
 exports.sendOtp = async (req, res) => {
     try {
         const { email } = req.body;
-
         // Check if the user is already registered
         const isUserPresent = await User.findOne({ where: { email } });
         if (isUserPresent) {
@@ -79,6 +78,7 @@ exports.sendOtp = async (req, res) => {
                 message: "User is already registered",
             });
         }
+        console.log("Data is coming", email);
 
         // Generate OTP
         let otp = otpGenerator.generate(6, {
@@ -88,18 +88,30 @@ exports.sendOtp = async (req, res) => {
         });
 
         // Ensure OTP is unique
-        let existingOtp = await OTP.findOne({ where: { otp } });
-        while (existingOtp) {
-            otp = otpGenerator.generate(6, {
-                upperCaseAlphabets: false,
-                lowerCaseAlphabets: false,
-                specialChars: false,
-            });
-            existingOtp = await OTP.findOne({ where: { otp } });
+        // let existingOtp = await OTP.findOne({ where: { otp } });
+        // while (existingOtp) {
+        //     otp = otpGenerator.generate(6, {
+        //         upperCaseAlphabets: false,
+        //         lowerCaseAlphabets: false,
+        //         specialChars: false,
+        //     });
+        //     existingOtp = await OTP.findOne({ where: { otp } });
+        // }
+
+        let existingOTP = await OTP.findOne({ where: { email } });
+
+        if (existingOTP) {
+            // If {email, otp} already exists, delete it
+            await existingOTP.destroy();
         }
 
-        // Store OTP in database
+        // Store new OTP in database
         await OTP.create({ email, otp });
+
+        console.log(`Generated and stored OTP for ${email}: ${otp}`);
+
+        // // Store OTP in database
+        // await OTP.create({ email, otp });
 
         // Return success response
         return res.status(200).json({
@@ -165,7 +177,7 @@ exports.login = async (req, res) => {
             };
             res.cookie("token", token, options).status(200).json({
                 success: true,
-                token : token,
+                token: token,
                 user,
                 message: `User login success`,
             });

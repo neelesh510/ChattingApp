@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/User');
 const MessageRoutes = require("./routes/Message");
 const dotenv = require("dotenv");
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
