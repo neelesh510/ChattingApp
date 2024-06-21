@@ -4,7 +4,7 @@ const User = require('./User');
 
 const Message = sequelize.define('Message', {
   senderId: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
     allowNull: false,
     references: {
       model: 'Users', // Assuming your User model is named 'Users' in MySQL
@@ -12,7 +12,7 @@ const Message = sequelize.define('Message', {
     }
   },
   receiverId: {
-    type: DataTypes.STRING,
+    type: DataTypes.UUID,
     allowNull: false,
     references: {
       model: 'Users', // Assuming your User model is named 'Users' in MySQL

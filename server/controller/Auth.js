@@ -11,7 +11,9 @@ exports.signup = async (req, res) => {
         const {
             id, name, email, password, confirmPassword, otp
         } = req.body;
-        if (!id || !name || !email || !password || !confirmPassword || !otp) {
+        if (
+            // !id || 
+            !name || !email || !password || !confirmPassword || !otp) {
             return res.status(403).send({
                 success: false,
                 message: "All Fields are required",
@@ -46,7 +48,7 @@ exports.signup = async (req, res) => {
 
         // Create the new user
         const newUser = await User.create({
-            id,
+            // id,
             name,
             email,
             password: hashedPassword,
@@ -107,6 +109,7 @@ exports.sendOtp = async (req, res) => {
 
         // Store new OTP in database
         await OTP.create({ email, otp });
+        console.log(otp);
 
         console.log(`Generated and stored OTP for ${email}: ${otp}`);
 

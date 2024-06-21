@@ -2,22 +2,27 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
+const { setupSocket } = require("./socket/socket");
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/User');
 const MessageRoutes = require("./routes/Message");
 const dotenv = require("dotenv");
+dotenv.config();
 
+const PORT = process.env.PORT || 4000;
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
 app.use(cookieParser());
-const PORT = process.env.PORT || 4000;
-dotenv.config();
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const server = http.createServer(app);
+const io = setupSocket(server);
+module.exports = {server,io};
 
 // Use user routes
 app.use("/api/v1", userRoutes);
@@ -39,7 +44,7 @@ app.get("/", (req, res) => {
     console.log("All models were synchronized successfully.");
 
     // Start the server
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`App is running at ${PORT}`);
     });
 
