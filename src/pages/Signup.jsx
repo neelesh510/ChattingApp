@@ -37,13 +37,6 @@ const Signup = () => {
 
     dispatch(setSignupData(signupData));
     dispatch(sendotp(formData.email,navigate));
-
-    // setFormData({
-    //   name : "",
-    //   email : "",
-    //   password : "",
-    //   confirmPassword : ""
-    // });
   }
 
   return (
