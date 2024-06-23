@@ -2,11 +2,11 @@ const nodemailer = require("nodemailer");
 
 const mailSender = async (email, title, body) => {
     try {
-        console.log(`Preparing to send email to: ${email}`); // Debugging statement
+        console.log(`Preparing to send email to: ${email}`);
         let createMail = nodemailer.createTransport({
             host: process.env.MAIL_HOST,
-            port: 587, // Typically port 587 for secure SMTP
-            secure: false, // true for 465, false for other ports
+            port: 587,
+            secure: false,
             auth: {
                 user: process.env.MAIL_USER,
                 pass: process.env.MAIL_PASS

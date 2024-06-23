@@ -22,11 +22,11 @@ const OTP = sequelize.define('OTP', {
 });
 
 async function sendVerificationEmail(email, otp) {
-    console.log(`Sending OTP to: ${email}`); // Debugging statement
+    console.log(`Sending OTP to: ${email}`);
     const emailContent = `
         <h1>OTP Verification</h1>
         <p>Dear User,</p>
-        <p>Thank you for registering with MealExpanse And Resolution. To complete your registration, please use the following OTP
+        <p>Thank you for registering with EasyChat. To complete your registration, please use the following OTP
             (One-Time Password) to verify your account:</p>
         <h2 class="highlight">${otp}</h2>
         <p>This OTP is valid for 5 minutes.</p>
@@ -43,7 +43,7 @@ async function sendVerificationEmail(email, otp) {
 
 OTP.addHook('afterCreate', async (otpInstance, options) => {
     console.log("New OTP document saved to database");
-    console.log(`Sending OTP to: ${otpInstance.email}`); // Debugging statement
+    console.log(`Sending OTP to: ${otpInstance.email}`); 
     await sendVerificationEmail(otpInstance.email, otpInstance.otp);
 });
 

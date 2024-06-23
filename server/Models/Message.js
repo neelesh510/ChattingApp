@@ -7,7 +7,7 @@ const Message = sequelize.define('Message', {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'Users', // Assuming your User model is named 'Users' in MySQL
+      model: 'Users', 
       key: 'id'
     }
   },
@@ -15,7 +15,7 @@ const Message = sequelize.define('Message', {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'Users', // Assuming your User model is named 'Users' in MySQL
+      model: 'Users', 
       key: 'id'
     }
   },
@@ -28,7 +28,6 @@ const Message = sequelize.define('Message', {
   timestamps: true
 });
 
-// Define associations
 Message.belongsTo(User, { as: 'sender', foreignKey: 'senderId' });
 Message.belongsTo(User, { as: 'receiver', foreignKey: 'receiverId' });
 

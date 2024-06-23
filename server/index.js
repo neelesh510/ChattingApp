@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
     console.log('Database connection has been established successfully.');
 
     // Sync all defined models to the DB
-    await sequelize.sync({ alter: true }); // Use { alter: true } in production to update the table structure without dropping it
+    await sequelize.sync({ alter: true }); 
     console.log("All models were synchronized successfully.");
 
     // Start the server
@@ -53,7 +53,6 @@ app.get("/", (req, res) => {
   }
 })();
 
-// Handle graceful shutdown
 process.on('SIGINT', async () => {
   try {
     await sequelize.close();
